@@ -1,37 +1,51 @@
-package visitor;
+    package visitor;
 
-import  antlr.*;
+    import antlr.CSSParser;
+    import antlr.CSSParserBaseVisitor;
+    import antlr.nodes.*;
 
-public class MyCSSVisitor extends CSSParserBaseVisitor<Void> {
+    public class MyCSSVisitor extends CSSParserBaseVisitor<Node> {
 
-    @Override
-    public Void visitStylesheet(CSSParser.StylesheetContext ctx) {
-        System.out.println("Start Processing CSS Stylesheet");
-        return visitChildren(ctx); // أكمل الزيارة للقواعد الداخلية
-    }
+        @Override
+        public Node visitStylesheet(CSSParser.StylesheetContext ctx) {
+            // Create the root node for CSS
+            Node root = new CssRuleNode(ctx.getStart().getLine(), "CSS_ROOT");
 
-    @Override
-    public Void visitRule(CSSParser.RuleContext ctx) {
-        // 1. طباعة اسم المحدد (Selector)
-        String selector = ctx.selector().getText();
-        System.out.println("\nRule for Selector: [" + selector + "]");
-        System.out.println("{");
-
-        // 2. المرور على جميع الخصائص داخل هذا المحدد
-        for (CSSParser.DeclarationContext decl : ctx.declaration()) {
-            String property = decl.property().getText();
-
-            // تجميع القيم المتعددة (مثل: 1px solid red)
-            StringBuilder fullValue = new StringBuilder();
-            for (CSSParser.ValueContext val : decl.value()) {
-                fullValue.append(val.getText()).append(" ");
+            // FIX: Added the missing closing parenthesis ')' after ctx.rule()
+            if (ctx.rule_() != null) {
+                for (CSSParser.RuleContext ruleCtx : ctx.rule_()) {
+                    // visit(ruleCtx) will call visitRule and return a Node
+                    root.addChild(visit(ruleCtx));
+                }
             }
+            return root;
+        }
+        @Override
+        public Node visitRule(CSSParser.RuleContext ctx) {
+            // Get the selector (e.g., .product-card)
+            String selector = ctx.selector().getText();
+            CssRuleNode ruleNode = new CssRuleNode(ctx.getStart().getLine(), selector);
 
-            // طباعة الخاصية وقيمتها بشكل مرتب
-            System.out.println("    " + property + ": " + fullValue.toString().trim() + ";");
+            // Visit each declaration (e.g., color: red;)
+            for (CSSParser.DeclarationContext declCtx : ctx.declaration()) {
+                ruleNode.addChild(visit(declCtx));
+            }
+            return ruleNode;
         }
 
-        System.out.println("}");
-        return null; // لا نحتاج لزيارة الأطفال لأننا طبعناهم يدوياً
+        @Override
+        public Node visitDeclaration(CSSParser.DeclarationContext ctx) {
+            String property = ctx.property().getText();
+            // Values can be multiple (e.g., margin: 10px 20px;)
+            StringBuilder value = new StringBuilder();
+            for (CSSParser.ValueContext valCtx : ctx.value()) {
+                value.append(valCtx.getText()).append(" ");
+            }
+
+            return new CssDeclarationNode(
+                    ctx.getStart().getLine(),
+                    property,
+                    value.toString().trim()
+            );
+        }
     }
-}

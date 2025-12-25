@@ -1,0 +1,15 @@
+<html>
+<body>
+<div class="product-container">
+    <h1>Available Products</h1>
+
+    {% for item in products %}
+    <div class="card">
+        <h2>{{ item.name }}</h2>
+        <p>Price: {{ item.price }}</p>
+    </div>
+    {% endfor %}
+
+</div>
+</body>
+</html>

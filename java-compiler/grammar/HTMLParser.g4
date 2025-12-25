@@ -16,6 +16,7 @@ element
     : tagElement      // تاق له بداية ونهاية
     | emptyElement    // تاق فارغ أو يغلق نفسه
     | HTML_TEXT       // نصوص
+    | jinjaElement
     ;
 
 tagElement
@@ -33,4 +34,8 @@ attribute
 
 content
     : element*
+    ;
+jinjaElement
+    : JINJA_STMT
+    | JINJA_EXPR
     ;

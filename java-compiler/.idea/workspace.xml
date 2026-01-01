@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="74322e7f-97df-44f4-8db4-b31dcf1040bf" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.vs/ProjectSettings.json" beforeDir="false" afterPath="$PROJECT_DIR$/.vs/ProjectSettings.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.vs/VSWorkspaceState.json" beforeDir="false" afterPath="$PROJECT_DIR$/.vs/VSWorkspaceState.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.vs/java-compiler.slnx/v18/DocumentLayout.json" beforeDir="false" afterPath="$PROJECT_DIR$/.vs/java-compiler.slnx/v18/DocumentLayout.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.vscode/settings.json" beforeDir="false" afterPath="$PROJECT_DIR$/.vscode/settings.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/grammar/CSSLexer.g4" beforeDir="false" afterPath="$PROJECT_DIR$/grammar/CSSLexer.g4" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/grammar/CSSParser.g4" beforeDir="false" afterPath="$PROJECT_DIR$/grammar/CSSParser.g4" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/grammar/HTMLLexer.g4" beforeDir="false" afterPath="$PROJECT_DIR$/grammar/HTMLLexer.g4" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/grammar/HTMLParser.g4" beforeDir="false" afterPath="$PROJECT_DIR$/grammar/HTMLParser.g4" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/antlr-4.13.2-complete.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/App.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/visitor/MyCSSVisitor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/visitor/MyCSSVisitor.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/visitor/MyHTMLVisitor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/visitor/MyHTMLVisitor.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../web-app/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/../web-app/app.py" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="ProjectColorInfo"><![CDATA[{
+  "customColor": "",
+  "associatedIndex": 4
+}]]></component>
+  <component name="ProjectId" id="37L0sgOPxwFYtz7anQWchsMu2t8" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.App.executor": "Debug",
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "dart.analysis.tool.window.visible": "false",
+    "git-widget-placeholder": "Khaldoun",
+    "ignore.virus.scanning.warn.message": "true",
+    "kotlin-language-version-configured": "true"
+  }
+}]]></component>
+  <component name="RunManager">
+    <configuration name="App" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="App" />
+      <module name="java-compiler" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.App" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-30f59d01ecdd-26cb7f24e5b0-intellij.indexing.shared.core-IU-253.29346.138" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="74322e7f-97df-44f4-8db4-b31dcf1040bf" name="Changes" comment="" />
+      <created>1766667257402</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1766667257402</updated>
+    </task>
+    <servers />
+  </component>
+</project>

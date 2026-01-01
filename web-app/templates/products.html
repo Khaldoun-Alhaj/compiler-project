@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block body %}
+    <div class="products-container">
+        {% for product in products %}
+            <div class="product-card">
+                <a href="{{ url_for('productInfo', product_id=product.id) }}" class="product-link">
+                    <img src="{{ product.image }}" alt="{{ product.name }} image" class="product-image">
+                    <div class="product-content">
+                        <h3 class="product-name">{{ product.name }}</h3>
+                        <p class="product-description">{{ product.description }}</p>
+                        <p class="product-price">{{ product.price }}</p>
+                    </div>
+                </a>
+                <button class="remove-button" aria-label="remove {{ product.name }} product" onclick="location.href='/remove-product?product_id={{ product.id }}'">Remove</button>
+            </div>
+        {% endfor %}
+    </div>
+    <button class="add-button" aria-label="add new product" onclick="location.href='add-product'">Add New Product</button>
+{% endblock %}

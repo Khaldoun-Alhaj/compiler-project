@@ -1,36 +1,62 @@
 parser grammar PythonParser;
-
 options { tokenVocab=PythonLexer; }
-
 @header { package antlr; }
 
-// Entry point
-parse : (routeDefinition | assignment)* EOF ;
+parse : (stmt | NL)* EOF ;
+
+// Core statements including Control Flow
+stmt
+    : routeDefinition
+    | assignment
+    | importStmt
+    | ifStmt
+    | forLoop
+    | returnStmt
+    | mainBlock
+    | expression (NL | EOF)
+    ;
+
+// NEW: Support for IF, ELIF, ELSE
+ifStmt
+    : IF expression COLON NL* INDENT statementBlock DEDENT
+      (ELIF expression COLON NL* INDENT statementBlock DEDENT)*
+      (ELSE COLON NL* INDENT statementBlock DEDENT)?
+    ;
+
+// NEW: Support for FOR loops
+forLoop
+    : FOR ID IN expression COLON NL* INDENT statementBlock DEDENT
+    ;
 
 routeDefinition
-    : DECORATOR DEF ID LPAREN RPAREN COLON statementBlock
+    : DECORATOR NL* DEF ID LPAREN RPAREN COLON NL* INDENT statementBlock DEDENT
     ;
 
-statementBlock
-    : (assignment | returnStmt)+
+statementBlock : (stmt | NL)+ ;
+
+assignment : ID ASSIGN expression (NL | EOF) ;
+returnStmt : RETURN expression (NL | EOF) ;
+
+expression
+    : expression (STAR | SLASH) expression   # mulDiv
+    | expression (PLUS | MINUS) expression   # addSub
+    | expression (EQ | NEQ | GT | GTE | LT | LTE) expression # comparison
+    | atom                                   # primary
     ;
 
-assignment
-    : ID ASSIGN value
+atom
+    : listLiteral                            # listExpr
+    | dictLiteral                            # dictExpr
+    | ID (DOT ID)* LPAREN argList? RPAREN    # callExpr
+    | STRING                                 # stringLiteral
+    | NUMBER                                 # numberLiteral
+    | ID (DOT ID)*                           # idLiteral
+    | NAME_VAR                               # idLiteral
+    | MAIN_STR                               # stringLiteral
+    | TRUE | FALSE | LPAREN expression RPAREN # parenExpr
     ;
 
-returnStmt
-    : RETURN ID LPAREN .*? RPAREN
-    ;
+argList : argument (COMMA argument)* ;
+argument : (ID ASSIGN)? expression ;
 
-value
-    : listLiteral
-    | dictLiteral
-    | STRING
-    | NUMBER
-    ;
-
-listLiteral : LBRACK (element (COMMA element)*)? RBRACK ;
-dictLiteral : LBRACE (pair (COMMA pair)*)? RBRACE ;
-pair        : STRING COLON element ;
-element     : STRING | NUMBER | dictLiteral | ID ;
+// Senior Logic: Recursively swallow structure insid

@@ -1,0 +1,27 @@
+<link rel="stylesheet" href="/static/style.css" />
+<div class="container">
+    <h1 class="main-title">{{ store_name }} Dashboard</h1>
+
+    <div style="text-align: right; margin-bottom: 20px;">
+        <a href="/admin/add" class="btn-primary" style="text-decoration:none; padding: 10px 20px;">+ Add New Product</a>
+    </div>
+
+    <div class="product-grid">
+        {% for p in products %}
+        <div class="card">
+            <a href="/product/{{ p.id }}">
+                <img src="/static/{{ p.img }}" style="cursor: pointer;" />
+            </a>
+            <h3>{{ p.name }}</h3>
+            <span class="price-tag">${{ p.price }}</span>
+            <p class="description-text">{{ p.desc }}</p>
+
+            <div style="margin-top: 15px; display: flex; justify-content: space-between;">
+                <a href="/product/{{ p.id }}" class="btn-primary" style="text-decoration:none; font-size:12px; background:#34495e;">Details</a>
+                <!-- تم تصحيح الرابط هنا ليتوافق مع app.py -->
+                <a href="/admin/delete_confirm/{{ p.id }}" class="btn-danger" style="text-decoration:none; font-size:12px;">Delete</a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>

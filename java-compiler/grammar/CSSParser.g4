@@ -1,34 +1,11 @@
 parser grammar CSSParser;
-
-
-
 options { tokenVocab=CSSLexer; }
-
-@header {
-    package antlr;
-}
-
-
-stylesheet  : rule* EOF ;
-
-rule : selector LBRACE declaration* RBRACE ;
-
-selector
-    : IDENT       // عناصر اساسية مثلا div
-    | DOT IDENT   // classes
-    | HASH IDENT  // ides
-    ;
-
-declaration
-    : property COLON value+ SEMI
-    ;
-
-property
-    : IDENT
-    ;
-
-value
-    : IDENT        // لل String value
-    | NUMBER_VAL   // لل آNumber
-    | HEX_COLOR    // لل الوان #fffffff
-    ;
+@header { package antlr; }
+stylesheet : css_rule* EOF ;
+css_rule : selector (COMMA selector)* LBRACE declaration* RBRACE ;
+selector : selector_part+ ;
+selector_part : IDENT | DOT IDENT | HASH IDENT ;
+declaration : property COLON value_list SEMI ;
+property : IDENT ;
+value_list : value+ ;
+value : IDENT | NUMBER_VAL | HEX_COLOR | STRING | LPAREN | RPAREN | COMMA ;

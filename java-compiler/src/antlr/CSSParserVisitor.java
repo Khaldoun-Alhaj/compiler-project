@@ -1,7 +1,5 @@
 // Generated from C:/Users/digital world/Documents/intelijProjects/compiler-project/java-compiler/grammar/CSSParser.g4 by ANTLR 4.13.2
-
-    package antlr;
-
+ package antlr; 
 import org.antlr.v4.runtime.tree.ParseTreeVisitor;
 
 /**
@@ -19,17 +17,23 @@ public interface CSSParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitStylesheet(CSSParser.StylesheetContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link CSSParser#rule}.
+	 * Visit a parse tree produced by {@link CSSParser#css_rule}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitRule(CSSParser.RuleContext ctx);
+	T visitCss_rule(CSSParser.Css_ruleContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link CSSParser#selector}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitSelector(CSSParser.SelectorContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link CSSParser#selector_part}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitSelector_part(CSSParser.Selector_partContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link CSSParser#declaration}.
 	 * @param ctx the parse tree
@@ -42,6 +46,12 @@ public interface CSSParserVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitProperty(CSSParser.PropertyContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link CSSParser#value_list}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitValue_list(CSSParser.Value_listContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link CSSParser#value}.
 	 * @param ctx the parse tree

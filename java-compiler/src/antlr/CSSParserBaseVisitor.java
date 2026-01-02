@@ -1,7 +1,5 @@
 // Generated from C:/Users/digital world/Documents/intelijProjects/compiler-project/java-compiler/grammar/CSSParser.g4 by ANTLR 4.13.2
-
-    package antlr;
-
+ package antlr; 
 import org.antlr.v4.runtime.tree.AbstractParseTreeVisitor;
 
 /**
@@ -27,7 +25,7 @@ public class CSSParserBaseVisitor<T> extends AbstractParseTreeVisitor<T> impleme
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitRule(CSSParser.RuleContext ctx) { return visitChildren(ctx); }
+	@Override public T visitCss_rule(CSSParser.Css_ruleContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -35,6 +33,13 @@ public class CSSParserBaseVisitor<T> extends AbstractParseTreeVisitor<T> impleme
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
 	@Override public T visitSelector(CSSParser.SelectorContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitSelector_part(CSSParser.Selector_partContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -49,6 +54,13 @@ public class CSSParserBaseVisitor<T> extends AbstractParseTreeVisitor<T> impleme
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
 	@Override public T visitProperty(CSSParser.PropertyContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitValue_list(CSSParser.Value_listContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *

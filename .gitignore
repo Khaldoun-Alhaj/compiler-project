@@ -10,6 +10,10 @@ target/
 .DS_Store
 Thumbs.db
 
+# Generated files
+*.interp
+*.tokens
+
 # Weird accidental folder
 tore .
 web-app/app.py

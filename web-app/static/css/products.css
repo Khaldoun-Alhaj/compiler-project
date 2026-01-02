@@ -1,0 +1,86 @@
+.products-container{
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px ,1fr));
+    gap: 24px;
+    padding: 12px;
+    padding-top: 0px;
+}
+
+.product-card{
+    position: relative;
+    border: 1px solid #0D8B96;
+    border-radius: 16px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.product-card:hover{
+    transform: translateY(-4px);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.1) 
+}
+
+.product-link{
+    display: block;
+    text-decoration: none;
+    color: #00100B;
+    padding: 12px;
+}
+
+.product-image{
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    object-position: center;
+    border-radius: 4px;
+}
+
+.remove-button{
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    z-index: 2;
+    padding-left: 8px;
+    padding-right: 8px;
+    padding-bottom: 4px;
+    padding-top: 4px;
+    background: #E63A37;
+    color: #E6E6E6;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: x-small;
+    transition: all 0.2s ease;
+}
+
+.remove-button:hover{
+    background: #B61916;
+    padding-left: 16px;
+    padding-right: 16px;
+    padding-bottom: 8px;
+    padding-top: 8px;
+    border-radius: 8px;
+    font-size: small;
+}
+
+.add-button{
+    width: 25%;
+    height: 80px;
+    padding-left: 8px;
+    padding-right: 8px;
+    padding-bottom: 4px;
+    padding-top: 4px;
+    background: #3E49CC;
+    color: #E6E6E6;
+    border: none;
+    border-radius: 16px;
+    cursor: pointer;
+    font-size: 22px;
+    margin: 12px;
+    transition: all 0.2s ease;
+}
+
+.add-button:hover{
+    background: #272F91;
+    transform: translateY(-4px);
+    box-shadow: 0 0px 16px rgba(0,0,0,0.5);
+}

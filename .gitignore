@@ -1,0 +1,14 @@
+# IntelliJ
+.idea/
+*.iml
+
+# Build / output
+out/
+target/
+
+# OS / junk
+.DS_Store
+Thumbs.db
+
+# Weird accidental folder
+tore .

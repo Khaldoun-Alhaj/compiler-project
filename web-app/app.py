@@ -1,90 +1,65 @@
-import os
 from flask import Flask, render_template, request, redirect, url_for
 
-class Product:
-    def __init__(self, id, name, description, image, price):
-        self.id = id
-        self.name = name
-        self.description = description
-        self.image = image
-        self.price = price
+app = Flask(__name__)
 
-Products = []
+# قاعدة بيانات في الذاكرة
+products = [
+    {
+        "id": 0,
+        "name": "MacBook_Air_M4",
+        "price": "1500",
+        "img": "laptop.png",
+        "desc": "Powerful_M4_Chip_Performance"
+    },
+    {
+        "id": 1,
+        "name": "iPhone_16_Pro",
+        "price": "1200",
+        "img": "phone.png",
+        "desc": "Apple_Intelligence_Features"
+    }
+]
 
-next_id = 1
+@app.route("/")
+def home():
+    store_name = "Elite_Tech_Store"
+    return render_template("list.html", products=products, store_name=store_name)
 
-skills_app = Flask(__name__)
+@app.route("/product/<int:p_id>")
+def view_details(p_id):
+    product = products[p_id]
+    return render_template("details.html", p=product)
 
-
-
-@skills_app.route("/")
-def products():
-    return render_template("products.html", title="Products", custom_css="products", products=Products)
-
-
-
-@skills_app.route("/product-info")
-def productInfo():
-    product_id = request.args.get('product_id')
-    
-    Product = None
-    for p in Products:
-        if p.id == int(product_id):
-            Product = p
-            break
-        
-    return render_template("product_info.html", title="Product Info", custom_css="product_info", product=Product)
-
-
-
-@skills_app.route("/add-product", methods=['GET', 'POST'])
-def addProduct():
-    global next_id
-    
-    if request.method == 'POST':
-        name = request.form.get('name')
-        description = request.form.get('description')
-        price = request.form.get('price')
-        
-        image_file = request.files.get('image')
-        image_filename = "static\\images\\default.jpg"
-        
-        if image_file and image_file.filename:
-            filename = str(next_id) + "_" + image_file.filename
-            image_path = os.path.join("static", "images", filename)
-            
-            image_file.save(image_path)
-            image_filename = filename
-            
-        new_product = Product(
-            id = next_id,
-            name = name,
-            description = description,
-            price = float(price),
-            image = f"static/images/{image_filename}"
-        )
-        
-        Products.append(new_product)
-        
-        next_id += 1
-        
+@app.route("/admin/add", methods=["GET", "POST"])
+def add_product():
+    if request.method == "POST":
+        new_id = len(products)
+        new_product = {
+            "id": new_id,
+            "name": request.form["name"],
+            "price": request.form["price"],
+            "img": request.form["img"], # الآن نأخذ اسم الصورة من النموذج
+            "desc": request.form["desc"]
+        }
+        products.append(new_product)
         return redirect("/")
-    
-    return render_template("add_product.html", title="Add New Product", custom_css="add_product")
+    return render_template("add.html")
 
+# مسار عرض صفحة التأكيد
+@app.route("/admin/delete_confirm/<int:p_id>")
+def delete_confirm(p_id):
+    target_p = products[p_id]
+    return render_template("delete.html", p=target_p)
 
-
-@skills_app.route("/remove-product")
-def remove_product():
-    product_id = request.args.get('product_id')
-    
-    for i, product in enumerate(Products):
-        if str(product.id) == product_id:
-            Products.pop(i)
-            break
-    
-    return redirect(url_for('products'))
+# مسار الحذف الفعلي (POST)
+@app.route("/admin/execute_delete/<int:p_id>", methods=["POST"])
+def execute_delete(p_id):
+    if p_id < len(products):
+        products.pop(p_id)
+        # إعادة ترتيب الـ IDs لضمان سلامة الروابط
+        for i in range(len(products)):
+            products[i]["id"] = i
+    return redirect("/")
 
 if __name__ == "__main__":
-    
-    skills_app.run(debug=True, host="192.168.1.8", port=9000)
+    app.run(debug=True)

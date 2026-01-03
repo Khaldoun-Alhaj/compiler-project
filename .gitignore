@@ -10,9 +10,13 @@ target/
 .DS_Store
 Thumbs.db
 
-# Generated files
+# ANTLR generated
 *.interp
 *.tokens
+*Lexer.java
+*Parser.java
+*BaseListener.java
+*BaseVisitor.java
 
 # Weird accidental folder
 tore .

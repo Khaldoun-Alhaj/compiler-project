@@ -1,17 +1,12 @@
 package antlr.nodes;
-
 public class TextNode extends Node {
     public String text;
-
-    public TextNode(int line, String text) {
-        super("PLAIN_TEXT", line);
-        this.text = text.trim();
+    public TextNode(int line, String raw) {
+        super("TEXT", line); this.text = (raw != null) ? raw.trim() : "";
     }
-
-    @Override
-    public void print(int indent) {
-        if (text.isEmpty()) return; // Don't print empty whitespace lines
+    @Override public void print(int indent) {
+        if (text.isEmpty()) return;
         printPadding(indent);
-        System.out.println("└── \"" + text + "\" [Line: " + lineNumber + "]");
+        System.out.println("└── TEXT: \"" + text + "\" [Line: " + lineNumber + "]");
     }
 }

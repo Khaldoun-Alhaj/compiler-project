@@ -1,0 +1,26 @@
+<link rel="stylesheet" href="/static/style.css" />
+<div class="container">
+    <div class="admin-panel">
+        <h2 class="main-title">Add New Product</h2>
+        <form method="POST">
+            <div class="form-group">
+                <label>Product Name:</label>
+                <input type="text" name="name" placeholder="e.g. MacBook Pro" required />
+            </div>
+            <div class="form-group">
+                <label>Price ($):</label>
+                <input type="text" name="price" placeholder="e.g. 1500" required />
+            </div>
+            <div class="form-group">
+                <label>Image Filename:</label>
+                <input type="text" name="img" placeholder="e.g. laptop.png (Must be in static folder)" required />
+            </div>
+            <div class="form-group">
+                <label>Description:</label>
+                <textarea name="desc" placeholder="Brief details..." required></textarea>
+            </div>
+            <button type="submit" class="btn-primary">Save Product</button>
+            <a href="/" style="display:block; text-align:center; margin-top:10px; color:#7f8c8d;">Cancel</a>
+        </form>
+    </div>
+</div>

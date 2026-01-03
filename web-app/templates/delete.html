@@ -1,0 +1,17 @@
+<link rel="stylesheet" href="/static/style.css" />
+<div class="container">
+    <div class="delete-box">
+        <h1 class="main-title" style="border-color:#e74c3c; color:#e74c3c;">Confirm Deletion</h1>
+        <p class="description-text" style="font-size:18px; margin: 20px 0;">
+            Are you sure you want to delete <strong>{{ p.name }}</strong>?
+        </p>
+
+        <div style="margin-top: 30px;">
+            <!-- تم تصحيح الـ action هنا ليتوافق مع app.py -->
+            <form action="/admin/execute_delete/{{ p.id }}" method="POST" style="display: inline;">
+                <button type="submit" class="btn-danger" style="padding: 12px 40px;">Delete Forever</button>
+            </form>
+            <a href="/" class="btn-primary" style="text-decoration: none; margin-left: 10px; background: #95a5a6;">Cancel</a>
+        </div>
+    </div>
+</div>

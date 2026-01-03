@@ -1,25 +1,30 @@
 lexer grammar CSSLexer;
+@header { package antlr; }
 
-@header {
-    package antlr;
-}
-CSSCOMMENT : '/*' (. | [\r\n])*? '*/' -> skip ;
-LBRACE      : '{';
-RBRACE      : '}';
-COLON       : ':';
-SEMI        : ';';
-HASH        : '#';
-DOT         : '.';
+CSSCOMMENT : '/*' .*? '*/' -> skip ;
 
+LBRACE : '{';
+RBRACE : '}';
+COLON : ':';
+SEMI : ';';
+HASH : '#';
+DOT : '.';
+COMMA : ',';
+LPAREN : '(';
+RPAREN : ')';
 
-// الأرقام، النسب المئوية، والبكسل
-NUMBER_VAL  : [0-9]+ ('px'|'em'|'%')? ;
+// تحسين: دعم أرقام عشرية وصحيحة مع وحدات متعددة
+NUMBER_VAL
+    : [0-9]+ '.' [0-9]+ UNIT?  // مثل: 1.5px
+    | [0-9]+ UNIT?              // مثل: 10px أو 0
+    ;
 
-// الألوان بنظام الـ Hex مثل #fff
-HEX_COLOR   : '#' [0-9a-fA-F]+ ;
+fragment UNIT
+    : 'px' | 'em' | 'rem' | '%' | 's' | 'ms'
+    | 'vh' | 'vw' | 'vmin' | 'vmax'
+    ;
 
-// المعرفات: تشمل أسماء التاقات (div)، الكلاسات، الخصائص (color)، والقيم النصية (red, bold)
-// لاحظ وجود الشارطة - لدعم product-container
-IDENT       : [a-zA-Z-][a-zA-Z0-9-]* ;
-
-WS          : [ \t\r\n]+ -> skip ;
+STRING : '\'' .*? '\'' | '"' .*? '"' ;
+HEX_COLOR : '#' [0-9a-fA-F]+ ;
+IDENT : [a-zA-Z-][a-zA-Z0-9-]* ;
+WS : [ \t\r\n]+ -> skip ;

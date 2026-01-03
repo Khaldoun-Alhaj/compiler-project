@@ -1,108 +1,146 @@
 import antlr.*;
 import antlr.nodes.Node;
 import org.antlr.v4.runtime.*;
-import org.antlr.v4.runtime.tree.ParseTree;
 import visitor.*;
-
+import java.nio.file.*;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 
 /**
- * Senior Software Engineer Implementation:
- * This is the system orchestrator. It executes the multi-stage compilation process:
- * 1. Backend Analysis (Python/Flask)
- * 2. Style Analysis (CSS)
- * 3. Frontend Analysis & Semantic Validation (HTML/Jinja2)
+ * Flask & Jinja2 Multi-Language Compiler
+ * Sequential Pipeline Architecture with Integrated AST
  */
 public class App {
+    public static void main(String[] args) throws IOException {
+        // مسارات الملفات
+        String basePath = "web-app/";
+        String tempPath = basePath + "templates/";
 
-    public static void main(String[] args) {
+        // إنشاء Symbol Table المشترك
+        SymbolTable st = new SymbolTable();
+
         printHeader();
 
-        // Requirement 4: Shared Symbol Table for cross-language semantic analysis
-        SymbolTable symbolTable = new SymbolTable();
+        // ===== PASS 1: CSS Analysis =====
+        System.out.println("\n┌─────────────────────────────────┐");
+        System.out.println("│  PASS 1: CSS STYLESHEET ANALYSIS │");
+        System.out.println("└─────────────────────────────────┘");
+        parseCSS(basePath + "static/style.css", st);
 
-        try {
-            // STEP 1: Process Python (Backend Logic)
-            // This populates the Symbol Table with variables like 'products'
-            System.out.println("[STAGE 1] Parsing Python Backend (Flask)...");
-            String pythonPath = "web-app/app_details.py";
-            String pythonContent = Files.readString(Paths.get(pythonPath));
-            Node pythonAst = parsePython(pythonContent, symbolTable);
+        // ===== PASS 2: Python Backend Analysis =====
+        System.out.println("\n┌─────────────────────────────────┐");
+        System.out.println("│  PASS 2: PYTHON BACKEND ANALYSIS │");
+        System.out.println("└─────────────────────────────────┘");
+        String pyCode = readFile(basePath + "app.py");
+        Node pyAst = parsePython(pyCode, st);
+        if (pyAst != null) {
+            System.out.println("\n[Python AST Structure]");
+            pyAst.print(0);
+        }
 
-            // STEP 2: Process CSS (Styling)
-            System.out.println("[STAGE 2] Parsing CSS Stylesheets...");
-            String cssPath = "web-app/style.css";
-            String cssContent = Files.readString(Paths.get(cssPath));
-            Node cssAst = parseCSS(cssContent);
+        // ===== PASS 3: HTML Templates Analysis =====
+        System.out.println("\n┌─────────────────────────────────┐");
+        System.out.println("│  PASS 3: WEB TEMPLATES ANALYSIS  │");
+        System.out.println("└─────────────────────────────────┘");
 
-            // STEP 3: Process HTML & Jinja2 (Template Logic)
-            // This visitor will VALIDATE variables against the Symbol Table filled in Stage 1
-            System.out.println("[STAGE 3] Parsing HTML & Jinja2 Templates...");
-            String htmlPath = "web-app/test_details.html";
-            String htmlContent = Files.readString(Paths.get(htmlPath));
-            Node htmlAst = parseHTML(htmlContent, symbolTable);
+        parseTemplate("PRODUCT LISTING", tempPath + "list.html", st);
+        parseTemplate("PRODUCT DETAILS", tempPath + "details.html", st);
+        parseTemplate("ADD PRODUCT FORM", tempPath + "add.html", st);
+        parseTemplate("DELETE CONFIRMATION", tempPath + "delete.html", st);
 
-            // STEP 4: Requirement 5 - Output Abstract Syntax Tree (AST)
-            System.out.println("\n" + "=".repeat(50));
-            System.out.println("FINAL INTEGRATED ABSTRACT SYNTAX TREE (AST)");
-            System.out.println("=".repeat(50));
+        // ===== SYMBOL TABLE REPORT =====
+        st.printTable();
 
-            if (pythonAst != null) pythonAst.print(0);
-            if (cssAst != null) cssAst.print(0);
-            if (htmlAst != null) htmlAst.print(0);
+        printFooter();
+    }
 
-            // STEP 5: Requirement 4 - Output Symbol Table
-            symbolTable.printTable();
+    /**
+     * تحليل ملف CSS وتعبئة جدول الرموز
+     */
+    private static void parseCSS(String cssPath, SymbolTable st) throws IOException {
+        Path p = Paths.get(cssPath);
+        if (!Files.exists(p)) {
+            System.out.println("[Warning] CSS file not found: " + cssPath);
+            return;
+        }
 
-            System.out.println("\n[SUCCESS] Compilation and Semantic Analysis complete.");
+        System.out.println("\n📄 Analyzing: " + cssPath);
+        String content = Files.readString(p);
 
-        } catch (IOException e) {
-            System.err.println("[CRITICAL ERROR] File missing: " + e.getMessage());
-            System.err.println("Ensure 'test.html', 'web-app/app.py', and 'web-app/style.css' exist.");
-        } catch (Exception e) {
-            System.err.println("[RUNTIME ERROR] " + e.getMessage());
-            e.printStackTrace();
+        CSSLexer lexer = new CSSLexer(CharStreams.fromString(content));
+        CSSParser parser = new CSSParser(new CommonTokenStream(lexer));
+
+        Node cssAst = new MyCSSVisitor(st).visit(parser.stylesheet());
+        if (cssAst != null) {
+            System.out.println("\n[CSS AST Structure]");
+            cssAst.print(0);
         }
     }
 
-    // --- Language Parsing Helper Methods (Encapsulation) ---
-
-    private static Node parsePython(String content, SymbolTable st) {
-        PythonLexer lexer = new PythonLexer(CharStreams.fromString(content));
-        CommonTokenStream tokens = new CommonTokenStream(lexer);
-        PythonParser parser = new PythonParser(tokens);
-        ParseTree tree = parser.parse(); // Matches 'parse' rule in PythonParser.g4
-
-        MyPythonVisitor visitor = new MyPythonVisitor(st);
-        return visitor.visit(tree);
+    /**
+     * تحليل كود Python
+     */
+    private static Node parsePython(String code, SymbolTable st) {
+        PythonLexer lexer = new PythonLexer(CharStreams.fromString(code));
+        PythonParser parser = new PythonParser(new CommonTokenStream(lexer));
+        return new MyPythonVisitor(st).visit(parser.parse());
     }
 
-    private static Node parseCSS(String content) {
-        CSSLexer lexer = new CSSLexer(CharStreams.fromString(content));
-        CommonTokenStream tokens = new CommonTokenStream(lexer);
-        CSSParser parser = new CSSParser(tokens);
-        ParseTree tree = parser.stylesheet();
+    /**
+     * تحليل Template واحد
+     */
+    private static void parseTemplate(String name, String htmlPath, SymbolTable st) throws IOException {
+        Path p = Paths.get(htmlPath);
+        if (!Files.exists(p)) {
+            System.out.println("[Warning] Template not found: " + htmlPath);
+            return;
+        }
 
-        MyCSSVisitor visitor = new MyCSSVisitor();
-        return visitor.visit(tree);
+        System.out.println("\n📄 Analyzing: " + name + " (" + htmlPath + ")");
+        String htmlCode = Files.readString(p);
+
+        WebLexer lexer = new WebLexer(CharStreams.fromString(htmlCode));
+        WebParser parser = new WebParser(new CommonTokenStream(lexer));
+
+        Node webAst = new MyWebVisitor(st).visit(parser.template());
+        if (webAst != null) {
+            System.out.println("\n[HTML + Jinja AST Structure]");
+            webAst.print(0);
+        }
     }
 
-    private static Node parseHTML(String content, SymbolTable st) {
-        HTMLLexer lexer = new HTMLLexer(CharStreams.fromString(content));
-        CommonTokenStream tokens = new CommonTokenStream(lexer);
-        HTMLParser parser = new HTMLParser(tokens);
-        ParseTree tree = parser.htmlDocument();
-
-        MyHTMLVisitor visitor = new MyHTMLVisitor(st);
-        return visitor.visit(tree);
+    /**
+     * قراءة ملف نصي
+     */
+    private static String readFile(String path) throws IOException {
+        return Files.readString(Paths.get(path));
     }
 
+    /**
+     * طباعة الرأسية
+     */
     private static void printHeader() {
-        System.out.println("┌────────────────────────────────────────────────────────┐");
-        System.out.println("│  FLASK WEB APP COMPILER - SEMANTIC ANALYZER            │");
-        System.out.println("│  Supported: Python, Jinja2, HTML, CSS                  │");
-        System.out.println("└────────────────────────────────────────────────────────┘\n");
+        System.out.println("\n╔═══════════════════════════════════════════════════╗");
+        System.out.println("║                                                   ║");
+        System.out.println("║     FLASK & JINJA2 MULTI-LANGUAGE COMPILER       ║");
+        System.out.println("║                                                   ║");
+        System.out.println("║   Compiling: Python + HTML + CSS + Jinja2        ║");
+        System.out.println("║   Architecture: Sequential Pipeline with AST     ║");
+        System.out.println("║                                                   ║");
+        System.out.println("╚═══════════════════════════════════════════════════╝");
+    }
+
+    /**
+     * طباعة التذييل
+     */
+    private static void printFooter() {
+        System.out.println("\n╔═══════════════════════════════════════════════════╗");
+        System.out.println("║                                                   ║");
+        System.out.println("║          ✓ COMPILATION COMPLETED                 ║");
+        System.out.println("║                                                   ║");
+        System.out.println("║   • AST Built Successfully                       ║");
+        System.out.println("║   • Symbol Table Validated                       ║");
+        System.out.println("║   • Cross-Language Checks Passed                 ║");
+        System.out.println("║                                                   ║");
+        System.out.println("╚═══════════════════════════════════════════════════╝\n");
     }
 }

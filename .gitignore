@@ -1,0 +1,23 @@
+# IntelliJ
+.idea/
+*.iml
+
+# Build / output
+out/
+target/
+
+# OS / junk
+.DS_Store
+Thumbs.db
+
+# ANTLR generated
+*.interp
+*.tokens
+*Lexer.java
+*Parser.java
+*BaseListener.java
+*BaseVisitor.java
+
+# Weird accidental folder
+tore .
+web-app/app.py
